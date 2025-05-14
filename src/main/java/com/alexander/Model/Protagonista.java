@@ -74,7 +74,8 @@ public class Protagonista extends Personaje {
         }
         System.out.println("Intentando mover al protagonista a: (" + nuevaX + ", " + nuevaY + ")");
         if (p.getTab().EstaCasillaEstaVacia(nuevaX, nuevaY)
-                && p.getTab().getTipoCasilla(nuevaX, nuevaY) == TipoCasilla.Suelo) {
+                && p.getTab().getTipoCasilla(nuevaX, nuevaY) == TipoCasilla.Suelo
+                || p.getTab().getTipoCasilla(nuevaX, nuevaY) == TipoCasilla.Trampa) {
             if (p.getP() == null) {
                 System.err.println("Error: El protagonista no está inicializado.");
                 return;
@@ -82,14 +83,14 @@ public class Protagonista extends Personaje {
 
             System.out.println("Movimiento válido. Actualizando posición del protagonista.");
             p.getTab().actualizarCasilla(p.getP(), nuevaX, nuevaY);
+            if (p.getTab().EstaCasillaEstaVacia(nuevaX, nuevaY)
+                    || p.getTab().getTipoCasilla(nuevaX, nuevaY) == TipoCasilla.Trampa) {
+                this.vitalidad -= (int) (this.vitalidad * 0.9);
+                System.out.println("El protagonista pierde " + this.vitalidad * 0.1 + " puntos de vida");
+            }
             notifyObservers();
 
-            // Mover a los enemigos después de mover al protagonista
-            for (Personaje personaje : p.getGp().getNombrePersonaje()) {
-                if (personaje instanceof Enemigo) {
-                    personaje.moverse();
-                }
-            }
+            
         }
     }
 }

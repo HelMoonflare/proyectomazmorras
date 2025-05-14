@@ -76,12 +76,13 @@ public class Dungeon implements Observer {
             col.setPrefWidth(30);
             col.setMaxWidth(30);
             gridTablero.getColumnConstraints().add(col);
-            gridTableroPersonajes.getColumnConstraints().add(col); // Asegurarse de que ambos GridPane tengan las mismas columnas
+            gridTableroPersonajes.getColumnConstraints().add(col); // Asegurarse de que ambos GridPane tengan las mismas
+                                                                   // columnas
         }
 
         // limpieza del StackPane antes de agregar nuevos elementos
-        stackPane.getChildren().clear();   
-        
+        stackPane.getChildren().clear();
+
         // Agregar ambos GridPane al StackPane
         stackPane.getChildren().addAll(gridTablero, gridTableroPersonajes);
 
@@ -124,8 +125,10 @@ public class Dungeon implements Observer {
         Tablero tableroEnemigos = Proveedor.getInstance().getTab();
         gridTableroPersonajes.getChildren().clear();
 
-        Image enemigo = new Image(App.class.getResourceAsStream("/com/alexander/data/enemigo.png"), 50, 50, false, false);
-        Image prota = new Image(App.class.getResourceAsStream("/com/alexander/data/SpriteProta.png"), 50, 50, false, false);
+        Image enemigo = new Image(App.class.getResourceAsStream("/com/alexander/data/enemigo.png"), 50, 50, false,
+                false);
+        Image prota = new Image(App.class.getResourceAsStream("/com/alexander/data/SpriteProta.png"), 50, 50, false,
+                false);
 
         for (int fila = 0; fila < tableroEnemigos.getNFilas(); fila++) {
             for (int col = 0; col < tableroEnemigos.getNColumnas(); col++) {
@@ -150,11 +153,14 @@ public class Dungeon implements Observer {
 
         Image camino = new Image(App.class.getResourceAsStream("data/SpriteCamino.jpg"), 50, 50, false, false);
         Image muro = new Image(App.class.getResourceAsStream("data/SpriteMuro.png"), 50, 50, false, false);
+        Image lava = new Image(App.class.getResourceAsStream("data/SpriteLava.jpg"), 50, 50, false, false);
 
         for (int fila = 0; fila < tablero.getNFilas(); fila++) {
             for (int col = 0; col < tablero.getNColumnas(); col++) {
                 if (tablero.getTipoCasilla(fila, col) == TipoCasilla.Pared) {
                     gridTablero.add(new ImageView(muro), col, fila);
+                } else if (tablero.getTipoCasilla(fila, col) == TipoCasilla.Trampa) {
+                    gridTablero.add(new ImageView(lava), col, fila);
                 } else {
                     gridTablero.add(new ImageView(camino), col, fila);
                 }

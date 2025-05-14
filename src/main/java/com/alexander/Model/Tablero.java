@@ -50,8 +50,11 @@ public class Tablero {
                             gp.getEnemigo().setCordX(i);
                             gp.getEnemigo().setCordY(filas);
                             break;
+                        case 4:
+                            tablero[filas][i] = new Casilla(TipoCasilla.Trampa, null);
+                            break;
                         default:
-                        
+
                             break;
                     }
                 }
