@@ -3,9 +3,9 @@ package com.alexander.Model;
 
 
 public class Personaje implements Comparable<Personaje> {
-    private int velocidad;
+    protected int velocidad;
     protected int vitalidad;
-    private int fuerza;
+    protected int fuerza;
     private int cordX;
     private int cordY;
 

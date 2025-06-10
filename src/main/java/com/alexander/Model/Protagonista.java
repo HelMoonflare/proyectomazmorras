@@ -93,6 +93,7 @@ public class Protagonista extends Personaje {
                 break;
         }
         System.out.println("Intentando mover al protagonista a: (" + nuevaX + ", " + nuevaY + ")");
+        Personaje enemigo = new Enemigo(velocidad, vitalidad, fuerza, percepcion, nombreEnemigo);
         Random r = new Random();
         int num = r.nextInt(4);
         if (p.getTab().EstaCasillaEstaVacia(nuevaX, nuevaY)
@@ -103,12 +104,13 @@ public class Protagonista extends Personaje {
 
         } else if (p.getTab().EstaCasillaEstaVacia(nuevaX, nuevaY)
                 && p.getTab().getTipoCasilla(nuevaX, nuevaY) == TipoCasilla.Maldicion && num < 2) {
-            this.vitalidad = (int) (this.vitalidad * 0.75);
+            this.vitalidad -= (int) (vitalidad * 0.75);
+            System.out.println("El protagonista pierde " + this.vitalidad * 0.25 + " puntos de vida");
 
         } else if (p.getTab().EstaCasillaEstaVacia(nuevaX, nuevaY)
                 && p.getTab().getTipoCasilla(nuevaX, nuevaY) == TipoCasilla.Maldicion && num > 2) {
-            GestorPersonajes.getEnemigo = vitalidad * 0.75;
-
+            enemigo.vitalidad -= (int) (vitalidad * 0.75);
+            System.out.println("El enemigo pierde " + enemigo.vitalidad * 0.25 + " puntos de vida");
         }
 
         // Mover a los enemigos después de mover al protagonista
