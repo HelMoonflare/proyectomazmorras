@@ -6,6 +6,7 @@ import java.util.Random;
 
 
 public class GestorPersonajes {
+    public static Object getEnemigo;
     private Protagonista prota;
     ArrayList<Personaje> personajes;
 
