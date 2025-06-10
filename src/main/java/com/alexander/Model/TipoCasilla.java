@@ -1,5 +1,5 @@
 package com.alexander.Model;
 
 public enum TipoCasilla {
-    Suelo, Pared
+    Suelo, Pared, Maldicion
 }

@@ -67,6 +67,9 @@ public class Tablero {
                                 enemigo.setCordY(i);
                             }
                             break;
+                        case 4:
+                            tablero[filas][i] = new Casilla(TipoCasilla.Maldicion, null);
+                            break;
                         default:
 
                             break;
