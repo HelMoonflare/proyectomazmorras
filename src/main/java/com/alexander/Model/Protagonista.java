@@ -93,30 +93,32 @@ public class Protagonista extends Personaje {
                 break;
         }
         System.out.println("Intentando mover al protagonista a: (" + nuevaX + ", " + nuevaY + ")");
-        Personaje enemigo = new Enemigo(velocidad, vitalidad, fuerza, percepcion, nombreEnemigo);
         Random r = new Random();
         int num = r.nextInt(4);
         if (p.getTab().EstaCasillaEstaVacia(nuevaX, nuevaY)
-                && p.getTab().getTipoCasilla(nuevaX, nuevaY) == TipoCasilla.Suelo) {
+                && p.getTab().getTipoCasilla(nuevaX, nuevaY) == TipoCasilla.Suelo
+                || p.getTab().getTipoCasilla(nuevaX, nuevaY) == TipoCasilla.Maldicion) {
+            if (p.getP() == null) {
+                System.err.println("Error: El protagonista no está inicializado.");
+                return;
+            }
 
             System.out.println("Movimiento válido. Actualizando posición del protagonista.");
             p.getTab().actualizarCasilla(p.getP(), nuevaX, nuevaY);
+            if (p.getTab().EstaCasillaEstaVacia(nuevaX, nuevaY)
+                    || p.getTab().getTipoCasilla(nuevaX, nuevaY) == TipoCasilla.Maldicion) {
+                this.vitalidad -= (int) (this.vitalidad * 0.9);
+                System.out.println("El protagonista pierde " + this.vitalidad * 0.1 + " puntos de vida");
+            }
+            notifyObservers();
 
-        } else if (p.getTab().EstaCasillaEstaVacia(nuevaX, nuevaY)
-                && p.getTab().getTipoCasilla(nuevaX, nuevaY) == TipoCasilla.Maldicion && num < 2) {
-            this.vitalidad -= (int) (vitalidad * 0.75);
-            System.out.println("El protagonista pierde " + this.vitalidad * 0.25 + " puntos de vida");
-
-        } else if (p.getTab().EstaCasillaEstaVacia(nuevaX, nuevaY)
-                && p.getTab().getTipoCasilla(nuevaX, nuevaY) == TipoCasilla.Maldicion && num > 2) {
-            enemigo.vitalidad -= (int) (vitalidad * 0.75);
-            System.out.println("El enemigo pierde " + enemigo.vitalidad * 0.25 + " puntos de vida");
+            
         }
-
         // Mover a los enemigos después de mover al protagonista
         else if (p.getTab().getPersonaje(nuevaX, nuevaY) instanceof Enemigo) {
             p.getP().pegar(p.getTab().getPersonaje(nuevaX, nuevaY));
 
         }
     }
+
 }
