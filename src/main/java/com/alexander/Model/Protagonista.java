@@ -110,7 +110,6 @@ public class Protagonista extends Personaje {
                 this.vitalidad -= (int) (this.vitalidad * 0.9);
                 System.out.println("El protagonista pierde " + this.vitalidad * 0.1 + " puntos de vida");
             }
-            notifyObservers();
 
             
         }
