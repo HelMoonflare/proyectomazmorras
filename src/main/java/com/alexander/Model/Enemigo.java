@@ -103,7 +103,7 @@ public class Enemigo extends Personaje implements Observer {
         int nuevaY = this.getCordY();
 
         for (int i = 0; i < 4; i++) {
-            if(p.getTab().momivimientoValido(direccionesPosibles[i][0]+nuevaX,direccionesPosibles[i][1]+nuevaY)){
+            if(p.getTab().movimientoValido(direccionesPosibles[i][0]+nuevaX,direccionesPosibles[i][1]+nuevaY)){
                 direcciones.add(direccionesPosibles[i]);
             }
         }

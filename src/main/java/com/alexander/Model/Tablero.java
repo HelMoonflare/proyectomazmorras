@@ -113,6 +113,28 @@ public class Tablero {
         pj.setCordX(x);
         pj.setCordY(y);
 
+        // Lógica de maldición
+        if (tablero[x][y].getTipo() == TipoCasilla.Maldicion) {
+            System.out.println("¡Maldición activada!");
+            ArrayList<Personaje> todos = new ArrayList<>();
+            // Añadir protagonista y enemigos vivos
+            if (Proveedor.getInstance().getP().getVitalidad() > 0) {
+                todos.add(Proveedor.getInstance().getP());
+            }
+            for (Personaje personaje : Proveedor.getInstance().getGp().getListaPersonaje()) {
+                if (personaje.getVitalidad() > 0 && !todos.contains(personaje)) {
+                    todos.add(personaje);
+                }
+            }
+            if (!todos.isEmpty()) {
+                Random r = new Random();
+                Personaje maldito = todos.get(r.nextInt(todos.size()));
+                int vidaActual = maldito.getVitalidad();
+                int bajarVida = (int)(vidaActual * 0.25);
+                maldito.setVitalidad(vidaActual - bajarVida);
+                System.out.println("¡" + maldito + " ha sido maldecido! Vida actual: " + maldito.getVitalidad());
+            }
+        }
     }
 
     /**
@@ -148,7 +170,7 @@ public class Tablero {
         return tablero[x][y].getPersonaje() == null;
     }
 
-    public boolean momivimientoValido(int x, int y) {
+    public boolean movimientoValido(int x, int y) {
         return (x >= 0 && y >= 0) && (x <= getAncho() && y <= getAlto()) && (getTipoCasilla(x, y) != TipoCasilla.Pared);
     }
 

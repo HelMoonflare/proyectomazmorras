@@ -1,7 +1,6 @@
 package com.alexander.Model;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import com.alexander.Interfaces.Observer;
 
@@ -24,7 +23,7 @@ public class Protagonista extends Personaje {
         // Inicializar la lista de observadores en el constructor
         this.observers = new ArrayList<>();
     }
-
+    
     /**
      * Método para obtener el nombre del protagonista.
      * 
@@ -33,7 +32,6 @@ public class Protagonista extends Personaje {
     public String getNombreProta() {
         return this.nombreProta;
     }
-
     /**
      * Método para establecer el nombre del protagonista.
      * 
@@ -42,7 +40,6 @@ public class Protagonista extends Personaje {
     public void setNombreProta(String nombreProta) {
         this.nombreProta = nombreProta;
     }
-
     /**
      * Método para obtener la dirección del protagonista.
      * 
@@ -51,7 +48,6 @@ public class Protagonista extends Personaje {
     public TipoMov getDireccion() {
         return this.direccion;
     }
-
     /**
      * Método para establecer la dirección del protagonista.
      * 
@@ -70,8 +66,8 @@ public class Protagonista extends Personaje {
 
     @Override
     /**
-     * Lógica de movimiento del protagonista.
-     */
+ * Lógica de movimiento del protagonista.
+ */
     public void moverse() {
         Proveedor p = Proveedor.getInstance();
         int nuevaX = p.getP().getCordX();
@@ -93,31 +89,18 @@ public class Protagonista extends Personaje {
                 break;
         }
         System.out.println("Intentando mover al protagonista a: (" + nuevaX + ", " + nuevaY + ")");
-        Random r = new Random();
-        int num = r.nextInt(4);
         if (p.getTab().EstaCasillaEstaVacia(nuevaX, nuevaY)
-                && p.getTab().getTipoCasilla(nuevaX, nuevaY) == TipoCasilla.Suelo
-                || p.getTab().getTipoCasilla(nuevaX, nuevaY) == TipoCasilla.Maldicion) {
-            if (p.getP() == null) {
-                System.err.println("Error: El protagonista no está inicializado.");
-                return;
-            }
-
+                && p.getTab().getTipoCasilla(nuevaX, nuevaY) == TipoCasilla.Suelo) {
+            
             System.out.println("Movimiento válido. Actualizando posición del protagonista.");
             p.getTab().actualizarCasilla(p.getP(), nuevaX, nuevaY);
-            if (p.getTab().EstaCasillaEstaVacia(nuevaX, nuevaY)
-                    || p.getTab().getTipoCasilla(nuevaX, nuevaY) == TipoCasilla.Maldicion) {
-                this.vitalidad -= (int) (this.vitalidad * 0.9);
-                System.out.println("El protagonista pierde " + this.vitalidad * 0.1 + " puntos de vida");
-            }
+            
 
+            // Mover a los enemigos después de mover al protagonista
+            
+        }else if (p.getTab().getPersonaje(nuevaX, nuevaY)instanceof Enemigo) {
+            p.getP().pegar(p.getTab().getPersonaje(nuevaX, nuevaY));
             
         }
-        // Mover a los enemigos después de mover al protagonista
-        else if (p.getTab().getPersonaje(nuevaX, nuevaY) instanceof Enemigo) {
-            p.getP().pegar(p.getTab().getPersonaje(nuevaX, nuevaY));
-
-        }
     }
-
 }
