@@ -56,24 +56,30 @@ public class Enemigo extends Personaje implements Observer {
     public String getNombreEnemigo() {
         return this.nombreEnemigo;
     }
+
     /**
- * Establece el nombre del enemigo.
- * @param nombreEnemigo Nombre a establecer.
- */
+     * Establece el nombre del enemigo.
+     * 
+     * @param nombreEnemigo Nombre a establecer.
+     */
     public void setNombreEnemigo(String nombreEnemigo) {
         this.nombreEnemigo = nombreEnemigo;
     }
+
     /**
- * Obtiene la percepción del enemigo.
- * @return Valor de percepción.
- */
+     * Obtiene la percepción del enemigo.
+     * 
+     * @return Valor de percepción.
+     */
     public int getPercepcion() {
         return this.percepcion;
     }
+
     /**
- * Establece la percepción del enemigo.
- * @param percepcion Valor de percepción.
- */
+     * Establece la percepción del enemigo.
+     * 
+     * @param percepcion Valor de percepción.
+     */
     public void setPercepcion(int percepcion) {
         this.percepcion = percepcion;
     }
@@ -83,7 +89,7 @@ public class Enemigo extends Personaje implements Observer {
         return "{" +
                 " nombreEnemigo='" + getNombreEnemigo() + "'" +
                 super.toString() +
-                ", percepcion='" + getPercepcion() + "'" + getCordX() + " "+ getCordY() +
+                ", percepcion='" + getPercepcion() + "'" + getCordX() + " " + getCordY() +
                 "}";
     }
 
@@ -95,40 +101,40 @@ public class Enemigo extends Personaje implements Observer {
         int mov = 0;
         Protagonista prota = p.getP();
         ArrayList<Integer[]> direcciones = new ArrayList<>();
-        Integer[][] direccionesPosibles = {{1,0},{0,-1},{-1,0},{0,1}};
-        
-        float distancia = this.CalculoAlgoritmo(this.getCordX(), this.getCordY(), prota.getCordX(),prota.getCordY());
+        Integer[][] direccionesPosibles = { { 1, 0 }, { 0, -1 }, { -1, 0 }, { 0, 1 } };
+
+        float distancia = this.CalculoAlgoritmo(this.getCordX(), this.getCordY(), prota.getCordX(), prota.getCordY());
         float menor = distancia;
         int nuevaX = this.getCordX();
         int nuevaY = this.getCordY();
 
         for (int i = 0; i < 4; i++) {
-            if(p.getTab().momivimientoValido(direccionesPosibles[i][0]+nuevaX,direccionesPosibles[i][1]+nuevaY)){
+            if (p.getTab().momivimientoValido(direccionesPosibles[i][0] + nuevaX, direccionesPosibles[i][1] + nuevaY)) {
                 direcciones.add(direccionesPosibles[i]);
             }
         }
         if (distancia >= this.percepcion) {
-               mov = r.nextInt(direcciones.size());
-        }else{
+            mov = r.nextInt(direcciones.size());
+        } else {
             for (int i = 0; i < direcciones.size(); i++) {
-                menor = CalculoAlgoritmo(p.getP().getCordX(),p.getP().getCordY(),getCordX()+direcciones.get(i)[0],getCordY()+direcciones.get(i)[1]);
-                if (menor<distancia) {
-                    menor=distancia;
+                menor = CalculoAlgoritmo(p.getP().getCordX(), p.getP().getCordY(), getCordX() + direcciones.get(i)[0],
+                        getCordY() + direcciones.get(i)[1]);
+                if (menor < distancia) {
+                    menor = distancia;
                     mov = i;
                 }
             }
         }
         nuevaX = this.getCordX() + direcciones.get(mov)[0];
         nuevaY = this.getCordY() + direcciones.get(mov)[1];
-        if (p.getTab().getPersonaje(nuevaX, nuevaY)instanceof Protagonista) {
+        if (p.getTab().getPersonaje(nuevaX, nuevaY) instanceof Protagonista) {
             p.getP().pegar(p.getTab().getPersonaje(nuevaX, nuevaY));
-        }else{
+        } else {
             tab.actualizarCasilla(this, nuevaX, nuevaY);
         }
-        
-       
+
         notifyObservers();
-       
+
     }
 
     @Override
@@ -136,8 +142,10 @@ public class Enemigo extends Personaje implements Observer {
         // Lógica para reaccionar a los cambios del protagonista
         this.moverse();
     }
+
     /**
      * Calcula la distancia entre dos puntos.
+     * 
      * @param x1 Coordenada X inicial.
      * @param y1 Coordenada Y inicial.
      * @param x2 Coordenada X final.

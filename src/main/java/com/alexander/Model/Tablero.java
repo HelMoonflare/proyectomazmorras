@@ -67,6 +67,10 @@ public class Tablero {
                                 enemigo.setCordY(i);
                             }
                             break;
+                        case 4:
+                            // Casilla de curación
+                            tablero[filas][i] = new Casilla(TipoCasilla.Curacion, null);
+                            break;
                         default:
 
                             break;
@@ -110,6 +114,27 @@ public class Tablero {
         pj.setCordX(x);
         pj.setCordY(y);
 
+        // Lógica de curación
+        if (tablero[x][y].getTipo() == TipoCasilla.Curacion) {
+            System.out.println("¡Curación activada!");
+            ArrayList<Personaje> todos = new ArrayList<>();
+            // Añadir protagonista y enemigos vivos
+            if (Proveedor.getInstance().getP().getVitalidad() > 0) {
+                todos.add(Proveedor.getInstance().getP());
+            }
+            for (Personaje personaje : Proveedor.getInstance().getGp().getListaPersonaje()) {
+                if (personaje.getVitalidad() > 0 && !todos.contains(personaje)) {
+                    todos.add(personaje);
+                }
+            }
+            if (!todos.isEmpty()) {
+                Random r = new Random();
+                Personaje curado = todos.get(r.nextInt(todos.size()));
+                int vidaActual = curado.getVitalidad();
+                curado.setVitalidad((int) (vidaActual + vidaActual * 0.25));
+                System.out.println("¡" + curado + " ha sido curado! Vida actual: " + curado.getVitalidad());
+            }
+        }
     }
 
     /**
