@@ -8,6 +8,7 @@ import com.alexander.SceneManager;
 import com.alexander.Interfaces.Observer;
 import com.alexander.Model.Personaje;
 import com.alexander.Model.Protagonista;
+import com.alexander.Model.Cobarde;
 import com.alexander.Model.Enemigo;
 import com.alexander.Model.GestorPersonajes;
 import com.alexander.Model.Proveedor;
@@ -133,6 +134,8 @@ public class Dungeon implements Observer {
 
         Image enemigo = new Image(App.class.getResourceAsStream("/com/alexander/data/enemigo.png"), 50, 50, false,
                 false);
+        Image cobarde = new Image(App.class.getResourceAsStream("/com/alexander/data/cobarde.png"), 50, 50, false,
+                false);
         Image prota = new Image(App.class.getResourceAsStream("/com/alexander/data/SpriteProta.png"), 50, 50, false,
                 false);
 
@@ -149,6 +152,8 @@ public class Dungeon implements Observer {
                     gridTableroPersonajes.add(new ImageView(prota), col, fila);
                 } else if (personaje instanceof Enemigo) {
                     gridTableroPersonajes.add(new ImageView(enemigo), col, fila);
+                } else if(personaje instanceof Cobarde) {
+                    gridTableroPersonajes.add(new ImageView(cobarde), col, fila);
                 }
 
             }

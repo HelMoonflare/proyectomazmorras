@@ -25,11 +25,24 @@ public class Tablero {
         tablero = new Casilla[13][13];
         String[] columnas;
         int filas = 0;
-        Random random = new Random();
         ArrayList<Personaje> enemigosCopia = new ArrayList<>((ArrayList<Personaje>) gp.getListaPersonaje());
         // Verificar si el protagonista está inicializado antes de usarlo
         if (gp.getProta() == null) {
             throw new IllegalStateException("El protagonista no está inicializado en GestorPersonajes.");
+        }
+        // Asegurar que hay al menos un Cobarde en la lista
+        boolean hayCobarde = false;
+        for (Personaje p : enemigosCopia) {
+            if (p instanceof Cobarde) {
+                hayCobarde = true;
+                break;
+            }
+        }
+        if (!hayCobarde) {
+            Cobarde cobardeExtra = new Cobarde(5, 2, 3, 3, "Cobarde Extra");
+            gp.insertarPersonaje(cobardeExtra);
+            enemigosCopia.add(cobardeExtra);
+            System.out.println("Cobarde añadido automáticamente a la lista de personajes");
         }
         try (BufferedReader br = new BufferedReader(new InputStreamReader(
                 new FileInputStream(new File(App.class.getResource("data/tablero.DARKEST").toURI())),
@@ -46,79 +59,78 @@ public class Tablero {
                             tablero[filas][i] = new Casilla(TipoCasilla.Pared, null);
                             break;
                         case 2:
-                            // Validar que el protagonista esté inicializado antes de usarlo
                             if (gp.getProta() == null) {
-                                throw new IllegalStateException(
-                                        "El protagonista no está inicializado en GestorPersonajes.");
+                                throw new IllegalStateException("El protagonista no está inicializado en GestorPersonajes.");
                             }
                             tablero[filas][i] = new Casilla(TipoCasilla.Suelo, gp.getProta());
                             gp.getProta().setCordX(filas);
                             gp.getProta().setCordY(i);
                             break;
                         case 3:
-                            int aleatorio = random.nextInt(enemigosCopia.size());
-                            if (enemigosCopia.get(aleatorio) instanceof Protagonista) {
-                                enemigosCopia.remove(aleatorio);
-                            } else {
-                                Enemigo enemigo = (Enemigo) enemigosCopia
-                                        .remove(aleatorio);
+                            Enemigo enemigo = null;
+                            for (int idx = 0; idx < enemigosCopia.size(); idx++) {
+                                if (enemigosCopia.get(idx) instanceof Enemigo && !(enemigosCopia.get(idx) instanceof Cobarde)) {
+                                    enemigo = (Enemigo) enemigosCopia.remove(idx);
+                                    break;
+                                }
+                            }
+                            if (enemigo != null) {
                                 tablero[filas][i] = new Casilla(TipoCasilla.Suelo, enemigo);
                                 enemigo.setCordX(filas);
                                 enemigo.setCordY(i);
+                            } else {
+                                tablero[filas][i] = new Casilla(TipoCasilla.Suelo, null);
                             }
                             break;
                         case 4:
-                            // Casilla de curación
                             tablero[filas][i] = new Casilla(TipoCasilla.Curacion, null);
                             break;
+                        case 5:
+                            Cobarde cobarde = null;
+                            for (int idx = 0; idx < enemigosCopia.size(); idx++) {
+                                if (enemigosCopia.get(idx) instanceof Cobarde) {
+                                    cobarde = (Cobarde) enemigosCopia.remove(idx);
+                                    break;
+                                }
+                            }
+                            if (cobarde != null) {
+                                tablero[filas][i] = new Casilla(TipoCasilla.Suelo, cobarde);
+                                cobarde.setCordX(filas);
+                                cobarde.setCordY(i);
+                                System.out.println("Cobarde colocado en (" + filas + "," + i + ")");
+                            } else {
+                                tablero[filas][i] = new Casilla(TipoCasilla.Suelo, null);
+                            }
+                            break;
                         default:
-
+                            tablero[filas][i] = new Casilla(TipoCasilla.Suelo, null);
                             break;
                     }
                 }
                 filas++;
-
             }
-        } catch (IOException e) {
+        } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
-        } catch (URISyntaxException e1) {
-
-            e1.printStackTrace();
         }
         return tablero;
     }
 
-    /**
-     * Actualiza la casilla con el personaje dado.
-     * 
-     * @param pj Personaje a colocar.
-     * @param x  Coordenada X.
-     * @param y  Coordenada Y.
-     */
     public void actualizarCasilla(Personaje pj, int x, int y) {
-        // Validar que las coordenadas estén dentro de los límites del tablero
         if (x < 0 || x >= tablero.length || y < 0 || y >= tablero[0].length) {
             System.err.println("Error: Coordenadas fuera de los límites del tablero.");
             return;
         }
-
-        // Si pj es null, limpia la casilla
         if (pj == null) {
             tablero[x][y].setPersonaje(null);
             return;
         }
-
-        // Actualiza la casilla del personaje en el tablero
         tablero[pj.getCordX()][pj.getCordY()].setPersonaje(null);
         tablero[x][y].setPersonaje(pj);
         pj.setCordX(x);
         pj.setCordY(y);
-
-        // Lógica de curación
         if (tablero[x][y].getTipo() == TipoCasilla.Curacion) {
             System.out.println("¡Curación activada!");
             ArrayList<Personaje> todos = new ArrayList<>();
-            // Añadir protagonista y enemigos vivos
             if (Proveedor.getInstance().getP().getVitalidad() > 0) {
                 todos.add(Proveedor.getInstance().getP());
             }
@@ -137,41 +149,20 @@ public class Tablero {
         }
     }
 
-    /**
-     * Obtiene el tipo de casilla en las coordenadas dadas.
-     * 
-     * @param x Coordenada X.
-     * @param y Coordenada Y.
-     * @return Tipo de casilla.
-     */
     public TipoCasilla getTipoCasilla(int x, int y) {
         return tablero[x][y].getTipo();
     }
 
-    /**
-     * Obtiene el personaje en las coordenadas dadas.
-     * 
-     * @param x Coordenada X.
-     * @param y Coordenada Y.
-     * @return Personaje en la casilla.
-     */
     public Personaje getPersonaje(int x, int y) {
         return tablero[x][y].getPersonaje();
     }
 
-    /**
-     * Verifica si la casilla está vacía.
-     * 
-     * @param x Coordenada X.
-     * @param y Coordenada Y.
-     * @return true si la casilla está vacía, false en caso contrario.
-     */
     public boolean EstaCasillaEstaVacia(int x, int y) {
         return tablero[x][y].getPersonaje() == null;
     }
 
-    public boolean momivimientoValido(int x, int y) {
-        return (x >= 0 && y >= 0) && (x <= getAncho() && y <= getAlto()) && (getTipoCasilla(x, y) != TipoCasilla.Pared);
+    public boolean movimientoValido(int x, int y) {
+        return (x >= 0 && y >= 0) && (x < getNFilas() && y < getNColumnas()) && (getTipoCasilla(x, y) != TipoCasilla.Pared);
     }
 
     public int getNFilas() {
@@ -186,11 +177,6 @@ public class Tablero {
         tablero[x][y].setPersonaje(null);
     }
 
-    /**
-     * Método para obtener el tablero.
-     * 
-     * @return Tablero.
-     */
     public Casilla[][] getTablero() {
         return tablero;
     }

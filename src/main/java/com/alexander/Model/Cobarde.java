@@ -5,7 +5,7 @@ import java.util.Random;
 
 import com.alexander.Interfaces.Observer;
 
-public class Enemigo extends Personaje implements Observer {
+public class Cobarde extends Personaje implements Observer {
     private String nombreEnemigo;
     private int percepcion;
     ArrayList<Observer> observers;
@@ -19,7 +19,7 @@ public class Enemigo extends Personaje implements Observer {
      * @param percepcion    Percepción del enemigo.
      * @param nombreEnemigo Nombre del enemigo.
      */
-    public Enemigo(int velocidad, int vitalidad, int fuerza, int percepcion, String nombreEnemigo) {
+    public Cobarde(int velocidad, int vitalidad, int fuerza, int percepcion, String nombreEnemigo) {
         super(velocidad, vitalidad, fuerza);
         this.nombreEnemigo = nombreEnemigo;
         this.percepcion = percepcion;
@@ -104,7 +104,7 @@ public class Enemigo extends Personaje implements Observer {
         Integer[][] direccionesPosibles = { { 1, 0 }, { 0, -1 }, { -1, 0 }, { 0, 1 } };
 
         float distancia = this.CalculoAlgoritmo(this.getCordX(), this.getCordY(), prota.getCordX(), prota.getCordY());
-        float menor = distancia;
+        float mayor = distancia;
         int nuevaX = this.getCordX();
         int nuevaY = this.getCordY();
 
@@ -117,10 +117,10 @@ public class Enemigo extends Personaje implements Observer {
             mov = r.nextInt(direcciones.size());
         } else {
             for (int i = 0; i < direcciones.size(); i++) {
-                menor = CalculoAlgoritmo(p.getP().getCordX(), p.getP().getCordY(), getCordX() + direcciones.get(i)[0],
+                float dist = CalculoAlgoritmo(p.getP().getCordX(), p.getP().getCordY(), getCordX() + direcciones.get(i)[0],
                         getCordY() + direcciones.get(i)[1]);
-                if (menor < distancia) {
-                    menor = distancia;
+                if (dist > mayor) {
+                    mayor = dist;
                     mov = i;
                 }
             }
