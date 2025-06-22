@@ -12,6 +12,7 @@ import com.alexander.Model.Cobarde;
 import com.alexander.Model.Enemigo;
 import com.alexander.Model.GestorPersonajes;
 import com.alexander.Model.Proveedor;
+import com.alexander.Model.Sanador;
 import com.alexander.Model.Tablero;
 import com.alexander.Model.TipoCasilla;
 import com.alexander.Model.TipoMov;
@@ -136,6 +137,8 @@ public class Dungeon implements Observer {
                 false);
         Image cobarde = new Image(App.class.getResourceAsStream("/com/alexander/data/cobarde.png"), 50, 50, false,
                 false);
+        Image sanador = new Image(App.class.getResourceAsStream("/com/alexander/data/healer.jpeg"), 50, 50, false,
+                false);
         Image prota = new Image(App.class.getResourceAsStream("/com/alexander/data/SpriteProta.png"), 50, 50, false,
                 false);
 
@@ -152,8 +155,10 @@ public class Dungeon implements Observer {
                     gridTableroPersonajes.add(new ImageView(prota), col, fila);
                 } else if (personaje instanceof Enemigo) {
                     gridTableroPersonajes.add(new ImageView(enemigo), col, fila);
-                } else if(personaje instanceof Cobarde) {
+                } else if (personaje instanceof Cobarde) {
                     gridTableroPersonajes.add(new ImageView(cobarde), col, fila);
+                } else if (personaje instanceof Sanador) {
+                    gridTableroPersonajes.add(new ImageView(sanador), col, fila);
                 }
 
             }

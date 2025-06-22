@@ -31,7 +31,7 @@ public class Tablero {
             throw new IllegalStateException("El protagonista no está inicializado en GestorPersonajes.");
         }
         // Asegurar que hay al menos un Cobarde en la lista
-        boolean hayCobarde = false;
+        /*boolean hayCobarde = false;
         for (Personaje p : enemigosCopia) {
             if (p instanceof Cobarde) {
                 hayCobarde = true;
@@ -43,7 +43,22 @@ public class Tablero {
             gp.insertarPersonaje(cobardeExtra);
             enemigosCopia.add(cobardeExtra);
             System.out.println("Cobarde añadido automáticamente a la lista de personajes");
+        }*/
+
+        boolean haySanador = false;
+        for (Personaje p : enemigosCopia) {
+            if (p instanceof Sanador) {
+                haySanador = true;
+                break;
+            }
         }
+        if (!haySanador) {
+            Sanador sanadorExtra = new Sanador(5, 2, 3, 3, "Sanador Extra");
+            gp.insertarPersonaje(sanadorExtra);
+            enemigosCopia.add(sanadorExtra);
+            System.out.println("Sanador añadido automáticamente a la lista de personajes");
+        }
+
         try (BufferedReader br = new BufferedReader(new InputStreamReader(
                 new FileInputStream(new File(App.class.getResource("data/tablero.DARKEST").toURI())),
                 StandardCharsets.UTF_8))) {
@@ -102,6 +117,24 @@ public class Tablero {
                                 tablero[filas][i] = new Casilla(TipoCasilla.Suelo, null);
                             }
                             break;
+
+                            case 6:
+                            Sanador sanador = null;
+                            for (int idx = 0; idx < enemigosCopia.size(); idx++) {
+                                if (enemigosCopia.get(idx) instanceof Sanador) {
+                                    sanador = (Sanador) enemigosCopia.remove(idx);
+                                    break;
+                                }
+                            }
+                            if (sanador != null) {
+                                tablero[filas][i] = new Casilla(TipoCasilla.Suelo, sanador);
+                                sanador.setCordX(filas);
+                                sanador.setCordY(i);
+                                System.out.println("Sanador colocado en (" + filas + "," + i + ")");
+                            } else {
+                                tablero[filas][i] = new Casilla(TipoCasilla.Suelo, null);
+                            }
+                            break;
                         default:
                             tablero[filas][i] = new Casilla(TipoCasilla.Suelo, null);
                             break;
@@ -128,6 +161,8 @@ public class Tablero {
         tablero[x][y].setPersonaje(pj);
         pj.setCordX(x);
         pj.setCordY(y);
+
+        //Método para casillas especiales
         if (tablero[x][y].getTipo() == TipoCasilla.Curacion) {
             System.out.println("¡Curación activada!");
             ArrayList<Personaje> todos = new ArrayList<>();

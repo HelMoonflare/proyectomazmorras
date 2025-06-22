@@ -114,6 +114,10 @@ public class Personaje implements Comparable<Personaje> {
         contrincante.setVitalidad(contrincante.getVitalidad() - (this.getFuerza() / 10));
     }
 
+    public void curar(Personaje contrincante) {
+        contrincante.setVitalidad(contrincante.getVitalidad() + (this.getFuerza() / 10));
+    }
+
     /**
      * Método para recibir un golpe.
      */

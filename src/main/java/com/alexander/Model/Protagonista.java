@@ -99,10 +99,12 @@ public class Protagonista extends Personaje {
             System.out.println("Movimiento válido. Actualizando posición del protagonista.");
             p.getTab().actualizarCasilla(p.getP(), nuevaX, nuevaY);
 
-        // Atacar a enemigos o cobardes
-        } else if (p.getTab().getPersonaje(nuevaX, nuevaY) instanceof Enemigo || p.getTab().getPersonaje(nuevaX, nuevaY) instanceof Cobarde) {
+            // Atacar a enemigos o cobardes
+        } else if (p.getTab().getPersonaje(nuevaX, nuevaY) instanceof Enemigo
+                || p.getTab().getPersonaje(nuevaX, nuevaY) instanceof Cobarde
+                || p.getTab().getPersonaje(nuevaX, nuevaY) instanceof Sanador) {
             p.getP().pegar(p.getTab().getPersonaje(nuevaX, nuevaY));
-            
+
         }
     }
 }
