@@ -31,33 +31,50 @@ public class Tablero {
             throw new IllegalStateException("El protagonista no está inicializado en GestorPersonajes.");
         }
         // Asegurar que hay al menos un Cobarde en la lista
-        /*boolean hayCobarde = false;
-        for (Personaje p : enemigosCopia) {
-            if (p instanceof Cobarde) {
-                hayCobarde = true;
-                break;
-            }
-        }
-        if (!hayCobarde) {
-            Cobarde cobardeExtra = new Cobarde(5, 2, 3, 3, "Cobarde Extra");
-            gp.insertarPersonaje(cobardeExtra);
-            enemigosCopia.add(cobardeExtra);
-            System.out.println("Cobarde añadido automáticamente a la lista de personajes");
-        }*/
+        /*
+         * boolean hayCobarde = false;
+         * for (Personaje p : enemigosCopia) {
+         * if (p instanceof Cobarde) {
+         * hayCobarde = true;
+         * }
+         * }
+         * if (!hayCobarde) {
+         * Cobarde cobardeExtra = new Cobarde(5, 2, 3, 3, "Cobarde");
+         * gp.insertarPersonaje(cobardeExtra);
+         * enemigosCopia.add(cobardeExtra);
+         * System.out.println("Cobarde añadido automáticamente a la lista de personajes"
+         * );
+         * }
+         */
 
         boolean haySanador = false;
         for (Personaje p : enemigosCopia) {
             if (p instanceof Sanador) {
                 haySanador = true;
-                break;
             }
         }
         if (!haySanador) {
-            Sanador sanadorExtra = new Sanador(5, 2, 3, 3, "Sanador Extra");
+            Sanador sanadorExtra = new Sanador(5, 2, 3, 3, "Sanador");
             gp.insertarPersonaje(sanadorExtra);
             enemigosCopia.add(sanadorExtra);
             System.out.println("Sanador añadido automáticamente a la lista de personajes");
         }
+
+        /*
+         * boolean hayAliado = false;
+         * for (Personaje p : enemigosCopia) {
+         * if (p instanceof Aliado) {
+         * hayAliado = true;
+         * }
+         * }
+         * if (!hayAliado) {
+         * Aliado aliadoExtra = new Aliado(5, 2, 3, 3, "Aliado");
+         * gp.insertarPersonaje(aliadoExtra);
+         * enemigosCopia.add(aliadoExtra);
+         * System.out.println("Aliado añadido automáticamente a la lista de personajes"
+         * );
+         * }
+         */
 
         try (BufferedReader br = new BufferedReader(new InputStreamReader(
                 new FileInputStream(new File(App.class.getResource("data/tablero.DARKEST").toURI())),
@@ -75,7 +92,8 @@ public class Tablero {
                             break;
                         case 2:
                             if (gp.getProta() == null) {
-                                throw new IllegalStateException("El protagonista no está inicializado en GestorPersonajes.");
+                                throw new IllegalStateException(
+                                        "El protagonista no está inicializado en GestorPersonajes.");
                             }
                             tablero[filas][i] = new Casilla(TipoCasilla.Suelo, gp.getProta());
                             gp.getProta().setCordX(filas);
@@ -84,7 +102,8 @@ public class Tablero {
                         case 3:
                             Enemigo enemigo = null;
                             for (int idx = 0; idx < enemigosCopia.size(); idx++) {
-                                if (enemigosCopia.get(idx) instanceof Enemigo && !(enemigosCopia.get(idx) instanceof Cobarde)) {
+                                if (enemigosCopia.get(idx) instanceof Enemigo
+                                        && !(enemigosCopia.get(idx) instanceof Cobarde)) {
                                     enemigo = (Enemigo) enemigosCopia.remove(idx);
                                     break;
                                 }
@@ -118,7 +137,7 @@ public class Tablero {
                             }
                             break;
 
-                            case 6:
+                        case 6:
                             Sanador sanador = null;
                             for (int idx = 0; idx < enemigosCopia.size(); idx++) {
                                 if (enemigosCopia.get(idx) instanceof Sanador) {
@@ -133,6 +152,24 @@ public class Tablero {
                                 System.out.println("Sanador colocado en (" + filas + "," + i + ")");
                             } else {
                                 tablero[filas][i] = new Casilla(TipoCasilla.Suelo, null);
+                            }
+                            break;
+
+                        case 7:
+                            Aliado aliado = null;
+                            for (int idx = 0; idx < enemigosCopia.size(); idx++) {
+                                if (enemigosCopia.get(idx) instanceof Aliado) {
+                                    aliado = (Aliado) enemigosCopia.remove(idx);
+                                    break;
+                                }
+                                if (aliado != null) {
+                                    tablero[filas][i] = new Casilla(TipoCasilla.Suelo, aliado);
+                                    aliado.setCordX(filas);
+                                    aliado.setCordY(i);
+                                    System.out.println("Aliado colocado en (" + filas + "," + i + ")");
+                                } else {
+                                    tablero[filas][i] = new Casilla(TipoCasilla.Suelo, null);
+                                }
                             }
                             break;
                         default:
@@ -162,7 +199,7 @@ public class Tablero {
         pj.setCordX(x);
         pj.setCordY(y);
 
-        //Método para casillas especiales
+        // Método para casillas especiales
         if (tablero[x][y].getTipo() == TipoCasilla.Curacion) {
             System.out.println("¡Curación activada!");
             ArrayList<Personaje> todos = new ArrayList<>();
@@ -197,7 +234,8 @@ public class Tablero {
     }
 
     public boolean movimientoValido(int x, int y) {
-        return (x >= 0 && y >= 0) && (x < getNFilas() && y < getNColumnas()) && (getTipoCasilla(x, y) != TipoCasilla.Pared);
+        return (x >= 0 && y >= 0) && (x < getNFilas() && y < getNColumnas())
+                && (getTipoCasilla(x, y) != TipoCasilla.Pared);
     }
 
     public int getNFilas() {

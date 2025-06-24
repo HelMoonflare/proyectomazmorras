@@ -9,6 +9,7 @@ public class Proveedor {
     private GestorPersonajes gp;
     private Tablero tab;
     private Protagonista p;
+    private Enemigo e;
     ArrayList<Observer> observers;
     private boolean finJuego = false;
 
@@ -78,6 +79,14 @@ public class Proveedor {
         this.p = p;
     }
 
+    public Enemigo getE() {
+        return e;
+    }
+
+    public void setE(Enemigo e) {
+        this.e = e;
+    }
+    
     public boolean getFinJuego() {
         return this.finJuego;
     }

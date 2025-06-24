@@ -8,6 +8,7 @@ import com.alexander.SceneManager;
 import com.alexander.Interfaces.Observer;
 import com.alexander.Model.Personaje;
 import com.alexander.Model.Protagonista;
+import com.alexander.Model.Aliado;
 import com.alexander.Model.Cobarde;
 import com.alexander.Model.Enemigo;
 import com.alexander.Model.GestorPersonajes;
@@ -96,7 +97,6 @@ public class Dungeon implements Observer {
         GenerarMapaPersonajes();
 
         // Configurar eventos de teclado para mover al protagonista
-
         stackPane.setOnKeyPressed(event -> {
             Protagonista prota = (Protagonista) Proveedor.getInstance().getP();
             switch (event.getCode()) {
@@ -119,8 +119,8 @@ public class Dungeon implements Observer {
                 default:
                     return;
             }
-            Proveedor.getInstance().MoverPersonajes();
             // Actualizar la visualización del tablero
+            Proveedor.getInstance().MoverPersonajes();
         });
 
         // Asegurarse de que el StackPane tenga el foco para capturar eventos de teclado
@@ -141,6 +141,8 @@ public class Dungeon implements Observer {
                 false);
         Image prota = new Image(App.class.getResourceAsStream("/com/alexander/data/SpriteProta.png"), 50, 50, false,
                 false);
+        Image aliado = new Image(App.class.getResourceAsStream("/com/alexander/data/cobarde.png"), 50, 50, false,
+                false);
 
         ArrayList<Personaje> personajes = (ArrayList<Personaje>) Proveedor.getInstance().getGp().getListaPersonaje();
         System.out.println("Personajes en la lista");
@@ -159,6 +161,8 @@ public class Dungeon implements Observer {
                     gridTableroPersonajes.add(new ImageView(cobarde), col, fila);
                 } else if (personaje instanceof Sanador) {
                     gridTableroPersonajes.add(new ImageView(sanador), col, fila);
+                } else if(personaje instanceof Aliado) {
+                    gridTableroPersonajes.add(new ImageView(aliado), col, fila);
                 }
 
             }
