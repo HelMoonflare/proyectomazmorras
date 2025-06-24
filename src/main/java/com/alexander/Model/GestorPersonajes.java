@@ -68,8 +68,15 @@ public class GestorPersonajes {
      */
     public Enemigo getEnemigo() {
         Random random = new Random();
-        return (Enemigo) personajes.get(random.nextInt(personajes.size()));
+        int n;
+        do {
+            n = random.nextInt(personajes.size());
+            personajes.get(n);
+        }
+        while(personajes.get(n) instanceof Protagonista || personajes.get(n) instanceof Sanador); 
+        return (Enemigo) personajes.get(n);
     }
+
 
     @Override
     public String toString() {

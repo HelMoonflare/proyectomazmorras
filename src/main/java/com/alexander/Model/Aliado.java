@@ -100,6 +100,7 @@ public class Aliado extends Personaje implements Observer {
         Tablero tab = p.getTab();
         int mov = 0;
         Protagonista prota = p.getP();
+        //Enemigo enemigo = p.getE();
         ArrayList<Integer[]> direcciones = new ArrayList<>();
         Integer[][] direccionesPosibles = { { 1, 0 }, { 0, -1 }, { -1, 0 }, { 0, 1 } };
 

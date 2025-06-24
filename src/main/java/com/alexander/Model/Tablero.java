@@ -54,7 +54,7 @@ public class Tablero {
             }
         }
         if (!haySanador) {
-            Sanador sanadorExtra = new Sanador(5, 2, 3, 3, "Sanador");
+            Sanador sanadorExtra = new Sanador(5, 2, 3, 10, "Sanador");
             gp.insertarPersonaje(sanadorExtra);
             enemigosCopia.add(sanadorExtra);
             System.out.println("Sanador añadido automáticamente a la lista de personajes");
